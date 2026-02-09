@@ -2,7 +2,7 @@ import { supabase } from "../lib/supabaseClient";
 
 export default async function ListPage() {
     const { data, error } = await supabase
-        .from("captions") // keep your real table name here
+        .from("captions")
         .select("content, created_datetime_utc, is_featured")
         .order("created_datetime_utc", { ascending: false })
         .limit(20);
