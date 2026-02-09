@@ -21,9 +21,9 @@ export default async function ListPage() {
             <h1>List</h1>
 
             <ul style={{ listStyle: "none", padding: 0 }}>
-                {data?.map((row) => (
+                {data?.map((row, index) => (
                     <li
-                        key={row.id}
+                        key={index}
                         style={{
                             marginBottom: 16,
                             padding: 12,
@@ -33,7 +33,6 @@ export default async function ListPage() {
                     >
                         <p>{row.content}</p>
                         <small>
-                            Likes: {row.like_count} ·{" "}
                             {new Date(row.created_datetime_utc).toLocaleString()}
                         </small>
                     </li>
