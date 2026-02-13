@@ -1,11 +1,10 @@
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/lib/supabase/server";
+import SignOutButton from "../protected/signout-button";
 
 export default async function ListPage() {
-    const { data, error } = await supabase
-        .from("captions")
-        .select("content, created_datetime_utc, is_featured")
-        .order("created_datetime_utc", { ascending: false })
-        .limit(20);
+    const supabase = await createClient();
+
+    const { data: userData, error } = await supabase.auth.getUser();
 
     if (error) {
         return (
@@ -18,26 +17,19 @@ export default async function ListPage() {
 
     return (
         <main style={{ padding: 24 }}>
-            <h1>List</h1>
+            <h1>Gated List Page</h1>
 
-            <ul style={{ listStyle: "none", padding: 0 }}>
-                {data?.map((row, index) => (
-                    <li
-                        key={index}
-                        style={{
-                            marginBottom: 16,
-                            padding: 12,
-                            border: "1px solid #444",
-                            borderRadius: 6,
-                        }}
-                    >
-                        <p>{row.content}</p>
-                        <small>
-                            {new Date(row.created_datetime_utc).toLocaleString()}
-                        </small>
-                    </li>
-                ))}
-            </ul>
+            <div style={{ marginBottom: 16 }}>
+                <p>
+                    <strong>Signed in as:</strong> {userData.user?.email}
+                </p>
+                <SignOutButton />
+            </div>
+
+            <hr style={{ margin: "24px 0" }} />
+
+            <p>This page is protected via middleware.</p>
+            <p>If you can see this, you are authenticated.</p>
         </main>
     );
 }
