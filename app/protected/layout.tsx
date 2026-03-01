@@ -1,17 +1,34 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import Link from "next/link";
 
-export default async function ProtectedLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getSession();
+ export default function Home() {
+   return (
+     <main
+       style={{
+         padding: 32,
+         fontFamily: "system-ui, sans-serif",
+       }}
+     >
+       <h1>Hello World</h1>
 
-  if (!data.session) {
-    redirect("/login");
-  }
+       <ul style={{ lineHeight: "2", marginTop: 16 }}>
+         <li>
+           <Link href="/login">Go to /login</Link>
+         </li>
 
-  return <>{children}</>;
-}
+         <li>
+           <Link href="/protected">Go to /protected (gated)</Link>
+         </li>
+
+         <li>
+           <Link href="/protected/upload">
+             Go to /protected/upload (Upload image → captions)
+           </Link>
+         </li>
+
+         <li>
+           <Link href="/list">Go to /list</Link>
+         </li>
+       </ul>
+     </main>
+   );
+ }
